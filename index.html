@@ -84,24 +84,23 @@
     {
       "id": 14,
       "start": "2026-03-19",
-      "end": null,
+      "end": "2026-07-11",
       "total": null
     }
   ],
   "specials": [
     {
-      "label": "🛏️",
+      "label": "\ud83d\udecf\ufe0f",
       "start": "2025-02-21",
       "end": "2025-06-14"
     },
     {
-      "label": "⚫️ ⚫️",
+      "label": "\u26ab\ufe0f \u26ab\ufe0f",
       "start": "2024-02-29",
       "end": null
     }
   ]
-}
-</script><script>
+}</script><script>
 const data=JSON.parse(document.getElementById('source-data').textContent);
 function today(){const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));return `${p.year}-${p.month}-${p.day}`}
 function display(d){return d.slice(5,7)+'/'+d.slice(8,10)+'/'+d.slice(0,4)}
