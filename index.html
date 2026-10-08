@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Days Since</title><style>
+*{box-sizing:border-box}body{margin:0;background:#efefef;color:#263124;font-family:Arial,sans-serif}main{max-width:1060px;margin:40px auto;padding:0 20px}h1{font-size:28px;margin-bottom:8px}.updated{color:#586452;margin-bottom:28px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:28px}h2{margin:0;background:#93c47d;color:#263124;text-align:center;font-size:18px;padding:16px}table{width:100%;border-collapse:collapse;text-align:center;font-variant-numeric:tabular-nums;background:#fff2cc}th{background:#ffd966;padding:13px 6px;font-size:12px}td{padding:12px 6px;border-bottom:1px solid #efefef}td:last-child{font-weight:bold}.ongoing{background:#d9ead3}.special{background:#ccc}caption{padding:12px;text-align:left}footer{font-size:13px;color:#586452;margin-top:22px}@media(max-width:700px){main{margin:24px auto;padding:0 12px}.columns{grid-template-columns:1fr;gap:22px}td{padding:12px 4px}}
+</style></head><body><main><h1>Days Since</h1><p class="updated" id="asof"></p><div class="columns"><section><h2>📆 By Date 📆</h2><table><thead><tr><th>#</th><th>Day started</th><th>Day ended</th><th>Total days</th></tr></thead><tbody id="dates"></tbody></table></section><section><h2>🏆 Hall of Fame 🏆</h2><table><thead><tr><th>#</th><th>Day started</th><th>Day ended</th><th>Total days</th></tr></thead><tbody id="fame"></tbody></table></section></div><footer>Green rows are ongoing. Existing sheet totals are preserved. Ongoing counters use the current Pacific date.</footer></main><script id="source-data" type="application/json">{
+  "records": [
+    {
+      "id": 1,
+      "start": "2021-06-07",
+      "end": "2021-09-20",
+      "total": 106
+    },
+    {
+      "id": 2,
+      "start": "2021-09-21",
+      "end": "2021-12-02",
+      "total": 73
+    },
+    {
+      "id": 3,
+      "start": "2021-12-03",
+      "end": "2023-02-19",
+      "total": 443
+    },
+    {
+      "id": 4,
+      "start": "2023-02-20",
+      "end": "2023-04-14",
+      "total": 51
+    },
+    {
+      "id": 5,
+      "start": "2023-04-15",
+      "end": "2023-05-21",
+      "total": 36
+    },
+    {
+      "id": 6,
+      "start": "2023-05-22",
+      "end": "2023-10-15",
+      "total": 146
+    },
+    {
+      "id": 7,
+      "start": "2023-10-16",
+      "end": "2024-01-06",
+      "total": null
+    },
+    {
+      "id": 8,
+      "start": "2024-01-07",
+      "end": "2024-03-09",
+      "total": null
+    },
+    {
+      "id": 9,
+      "start": "2024-03-10",
+      "end": "2024-10-27",
+      "total": null
+    },
+    {
+      "id": 10,
+      "start": "2024-10-28",
+      "end": "2025-06-14",
+      "total": null
+    },
+    {
+      "id": 11,
+      "start": "2025-06-15",
+      "end": "2025-07-05",
+      "total": null
+    },
+    {
+      "id": 12,
+      "start": "2025-07-06",
+      "end": "2025-10-26",
+      "total": null
+    },
+    {
+      "id": 13,
+      "start": "2025-10-27",
+      "end": "2026-03-18",
+      "total": null
+    },
+    {
+      "id": 14,
+      "start": "2026-03-19",
+      "end": null,
+      "total": null
+    }
+  ],
+  "specials": [
+    {
+      "label": "🛏️",
+      "start": "2025-02-21",
+      "end": "2025-06-14"
+    },
+    {
+      "label": "⚫️ ⚫️",
+      "start": "2024-02-29",
+      "end": null
+    }
+  ]
+}
+</script><script>
+const data=JSON.parse(document.getElementById('source-data').textContent);
+function today(){const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));return `${p.year}-${p.month}-${p.day}`}
+function display(d){return d.slice(5,7)+'/'+d.slice(8,10)+'/'+d.slice(0,4)}
+function days(r,t){return r.total??Math.round((Date.parse((r.end||t)+'T00:00:00Z')-Date.parse(r.start+'T00:00:00Z'))/86400000)}
+function row(r,label,t){const tr=document.createElement('tr');tr.className=r.end?'':'ongoing';for(const v of [label,display(r.start),display(r.end||t)+(r.end?'':' · today'),days(r,t)]){const td=document.createElement('td');td.textContent=v;tr.append(td)}return tr}
+function render(){const t=today();document.getElementById('asof').textContent='As of '+display(t)+' · Pacific Time';const dates=document.getElementById('dates'),fame=document.getElementById('fame');dates.replaceChildren();fame.replaceChildren();data.records.forEach(r=>dates.append(row(r,r.id,t)));data.records.filter(r=>r.end).sort((a,b)=>days(b,t)-days(a,t)).forEach((r,i)=>fame.append(row(r,i+1,t)));data.specials.forEach((r,i)=>{const tr=row(r,r.label,t);tr.className='special';(i===0?dates:fame).append(tr)})}render();setInterval(render,60000);
+</script></body></html>
