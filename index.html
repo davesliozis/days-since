@@ -86,14 +86,15 @@
       "start": "2026-03-19",
       "end": "2026-07-11",
       "total": null
+    },
+    {
+      "id": 15,
+      "start": "2026-07-12",
+      "end": null,
+      "total": null
     }
   ],
   "specials": [
-    {
-      "label": "\ud83d\udecf\ufe0f",
-      "start": "2025-02-21",
-      "end": "2025-06-14"
-    },
     {
       "label": "\u26ab\ufe0f \u26ab\ufe0f",
       "start": "2024-02-29",
@@ -106,5 +107,5 @@ function today(){const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/
 function display(d){return d.slice(5,7)+'/'+d.slice(8,10)+'/'+d.slice(0,4)}
 function days(r,t){return r.total??Math.round((Date.parse((r.end||t)+'T00:00:00Z')-Date.parse(r.start+'T00:00:00Z'))/86400000)}
 function row(r,label,t){const tr=document.createElement('tr');tr.className=r.end?'':'ongoing';for(const v of [label,display(r.start),display(r.end||t)+(r.end?'':' · today'),days(r,t)]){const td=document.createElement('td');td.textContent=v;tr.append(td)}return tr}
-function render(){const t=today();document.getElementById('asof').textContent='As of '+display(t)+' · Pacific Time';const dates=document.getElementById('dates'),fame=document.getElementById('fame');dates.replaceChildren();fame.replaceChildren();data.records.forEach(r=>dates.append(row(r,r.id,t)));data.records.filter(r=>r.end).sort((a,b)=>days(b,t)-days(a,t)).forEach((r,i)=>fame.append(row(r,i+1,t)));data.specials.forEach((r,i)=>{const tr=row(r,r.label,t);tr.className='special';(i===0?dates:fame).append(tr)})}render();setInterval(render,60000);
+function render(){const t=today();document.getElementById('asof').textContent='As of '+display(t)+' · Pacific Time';const dates=document.getElementById('dates'),fame=document.getElementById('fame');dates.replaceChildren();fame.replaceChildren();data.records.forEach(r=>dates.append(row(r,r.id,t)));data.records.filter(r=>r.end).sort((a,b)=>days(b,t)-days(a,t)).forEach((r,i)=>fame.append(row(r,i+1,t)));data.specials.forEach((r,i)=>{const tr=row(r,r.label,t);tr.className='special';fame.append(tr)})}render();setInterval(render,60000);
 </script></body></html>
